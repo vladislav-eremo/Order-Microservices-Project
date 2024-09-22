@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrderService.Domain.DTOs
 {
-    public record OrderDto
+    public record GetOrderDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }

@@ -8,13 +8,13 @@ namespace OrderService.App.Controllers
     public class OrderController(IOrderService orderService) : Controller
     {
         [HttpGet]
-        public ActionResult<List<OrderDto>> GetOrders()
+        public ActionResult<List<GetOrderDto>> GetOrders()
         {
             return Ok(orderService.GetAllOrders());
         }
 
         [HttpPost]
-        public IActionResult CreateOrder(OrderDto order)
+        public IActionResult CreateOrder(CreateOrderDto order)
         {
             orderService.CreateOrder(order);
             return Ok("Заявка создана");

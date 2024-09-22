@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using OrderService.Infrastructure;
 using OrderService.Infrastructure.Repositories.Order;
 using OrderService.Services.Order;
 using System.Reflection;
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+
+builder.Services.AddDbContext<OrderServiceDBContext>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IOrderService, OrderService.Services.Order.OrderService>();
 

@@ -9,7 +9,7 @@ namespace OrderService.Services.Order
 {
     public interface IOrderService
     {
-        void CreateOrder(OrderDto order);
-        List<OrderDto> GetAllOrders();
+        void CreateOrder(CreateOrderDto order);
+        List<GetOrderDto> GetAllOrders();
     }
 }

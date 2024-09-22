@@ -12,14 +12,15 @@ namespace OrderService.Services.Order
 {
     public class OrderService(IOrderRepository orderRepository, IMapper mapper) : IOrderService
     { 
-        public void CreateOrder(OrderDto order)
+        public void CreateOrder(CreateOrderDto order)
         {
             orderRepository.Add(mapper.Map<OrderEntity>(order));
+            orderRepository.Save();
         }
 
-        public List<OrderDto> GetAllOrders()
+        public List<GetOrderDto> GetAllOrders()
         {
-            return mapper.Map<List<OrderDto>>(orderRepository.Get());
+            return mapper.Map<List<GetOrderDto>>(orderRepository.Get());
         }
     }
 }

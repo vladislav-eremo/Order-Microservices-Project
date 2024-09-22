@@ -12,7 +12,8 @@ namespace OrderService.Services.Order
     internal class OrderServiceAutomapperProfile : Profile
     {
         public OrderServiceAutomapperProfile() {
-            CreateMap<OrderEntity, OrderDto>().ReverseMap();
+            CreateMap<OrderEntity, GetOrderDto>().ReverseMap();
+            CreateMap<CreateOrderDto, OrderEntity>();
         }
     }
 }

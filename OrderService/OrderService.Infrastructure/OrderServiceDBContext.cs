@@ -14,16 +14,16 @@ namespace OrderService.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<OrderEntity>().HasData(
-                new OrderEntity { Name = "Заказ на создание макета", Description = "Создать макет продуктового сайта" },
-                new OrderEntity { Name = "Заказ на создание API сервиса анализа данных", Description = "Создать API" });
+                new OrderEntity { Id = 1, Name = "Заказ на создание макета", Description = "Создать макет продуктового сайта" },
+                new OrderEntity { Id = 2, Name = "Заказ на создание API сервиса анализа данных", Description = "Создать API" });
 
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase("OrderServiceDB");
+            optionsBuilder.LogTo(message => Console.WriteLine(message));
         }
     }
 }
