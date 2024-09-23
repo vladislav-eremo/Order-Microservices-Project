@@ -1,0 +1,17 @@
+services:
+  order-service:
+    build:
+      context: ./OrderService/
+      dockerfile: ./OrderService.App/Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+    ports:
+     - 8080
+  rabbit-mq:
+    image: rabbitmq:4-management
+    ports:
+      - 15672
+      - 5672
+      - 5671

@@ -11,14 +11,8 @@ namespace OrderService.Infrastructure
     public class OrderServiceDBContext : DbContext
     {
         public DbSet<OrderEntity> Orders => Set<OrderEntity>();
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<OrderEntity>().HasData(
-                new OrderEntity { Id = 1, Name = "Заказ на создание макета", Description = "Создать макет продуктового сайта" },
-                new OrderEntity { Id = 2, Name = "Заказ на создание API сервиса анализа данных", Description = "Создать API" });
-
-        }
+        public DbSet<ProductEntity> Products => Set<ProductEntity>();
+        public DbSet<OrderProductEntity> OrderProducts => Set<OrderProductEntity>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTMs\" />
+  </ItemGroup>
+
 </Project>

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrderService.Domain.DTMs
+namespace OrderService.Services.Broker
 {
-    public class OrderDtm
+    public interface IBroker
     {
-
+        void SendMessage(string message);
     }
 }
