@@ -9,9 +9,20 @@ services:
           path: .
     ports:
      - 8080
+  notification-service:
+    build:
+      context: ./NotificationService/
+      dockerfile: ./NotificationService.App/Dockerfile
+  ocelot-gateway:
+    build: 
+      context: ./ApiGateway/
+      dockerfile: ./ApiGateway.App/Dockerfile
+    ports:
+     - 5001
+     - 8080
+     - 8081
   rabbit-mq:
     image: rabbitmq:4-management
     ports:
       - 15672
-      - 5672
-      - 5671
+      - 5671:6001
