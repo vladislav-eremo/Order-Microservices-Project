@@ -19,7 +19,9 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddLogging(builder => builder.AddConsole());
 builder.Services.AddDbContext<OrderServiceDBContext>();
+
 builder.Services.AddTransient<IBroker, RabbitMQService>();
+
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IOrderService, OrderService.Services.Order.OrderService>();
 

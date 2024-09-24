@@ -16,19 +16,20 @@ namespace OrderService.Services.Order
     { 
         public void CreateOrder(CreateOrderDto order)
         {
-            logger.LogInformation($"Creating new order {order.Name}");
+            logger.LogInformation("Creating new order {order}", order);
 
             orderRepository.Add(mapper.Map<OrderEntity>(order));
             orderRepository.Save();
 
             try
             {
-                logger.LogInformation($"Publishing order {order.Name} to other services");
+                logger.LogInformation("Publishing order {order} to other services", order);
                 brokerService.SendMessage(JsonSerializer.Serialize(order));
             }
             catch (Exception e)
             {
-                logger.LogError($"Error on publishing order {order.Name} to services", e);
+                logger.LogError("Error on publishing order {order}", order);
+                logger.LogError("Caugt error {error}", e);
                 throw;
             }
         }

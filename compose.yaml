@@ -1,28 +1,35 @@
 services:
   order-service:
+    hostname: order-s
     build:
       context: ./OrderService/
       dockerfile: ./OrderService.App/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development 
+      - ORDER_S_RABBITMQ_HOSTNAME=rabbit-mq
+      - ORDER_S_RABBITMQ_ORDER_ACCEPTED_EXCHANGE=order-ready-exchange
     develop:
       watch:
         - action: rebuild
           path: .
-    ports:
-     - 8080
   notification-service:
+    hostname: notification-s
     build:
       context: ./NotificationService/
       dockerfile: ./NotificationService.App/Dockerfile
+    environment:
+     - NOTIF_S_CONSUMER_HOSTNAME=rabbit-mq
+     - NOTIF_S_CONSUMER_EXCHANGE=order-ready-exchange
   ocelot-gateway:
+    hostname: gateway
     build: 
       context: ./ApiGateway/
       dockerfile: ./ApiGateway.App/Dockerfile
     ports:
-     - 5001
      - 8080
-     - 8081
   rabbit-mq:
+    hostname: rabbit-mq
     image: rabbitmq:4-management
     ports:
       - 15672
-      - 5671:6001
+      - 5672

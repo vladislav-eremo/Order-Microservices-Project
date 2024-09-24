@@ -1,19 +1,16 @@
 {
   "Routes": [
     {
-      "UpstreamPathTemplate": "/orders",
-      "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/order",
+      "UpstreamPathTemplate": "/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5047
+          "Host": "order-s",
+          "Port": 8080
         }
       ]
     }
-  ],
-  "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:8080"
-  }
+  ]
 }

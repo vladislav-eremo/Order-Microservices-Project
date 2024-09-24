@@ -14,6 +14,15 @@ namespace OrderService.Infrastructure
         public DbSet<ProductEntity> Products => Set<ProductEntity>();
         public DbSet<OrderProductEntity> OrderProducts => Set<OrderProductEntity>();
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderEntity>()
+                    .HasIndex(e => e.Id).IsUnique();
+
+            modelBuilder.Entity<OrderEntity>()
+                    .HasIndex(e => e.CustomerPhoneNumber);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase("OrderServiceDB");
