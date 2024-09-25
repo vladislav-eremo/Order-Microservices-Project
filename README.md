@@ -3,7 +3,7 @@ Test microservices task
 ## Getting Started
 
 ### Docker Compose build
-*docker-compose
+* docker-compose
 ```sh
 docker-compose up
 ```
