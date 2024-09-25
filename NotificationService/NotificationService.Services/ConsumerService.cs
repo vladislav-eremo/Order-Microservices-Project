@@ -10,6 +10,7 @@ namespace NotificationService.Services
 {
     public class ConsumerService
     {
+        private readonly ILogger<ConsumerService> _logger;
         private readonly ConsumerConfig _consumerConfig;
         private static IConnection? _connection;
         private static IModel? _channel;
@@ -27,8 +28,33 @@ namespace NotificationService.Services
             };
         }
 
+        private void InstantiateConnection(ConnectionFactory factory, int retryTimes = 5, int Interval = 1000)
+        {
+            _logger.LogInformation("Starting connection instantiate...");
+
+            var attempts = retryTimes;
+
+            for(int i = 0; i < attempts; i++)
+            {
+                try
+                {
+                    _logger.LogInformation("#{i} Connecting attempt", i + 1);
+                    _connection = factory.CreateConnection();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Connection attempt failed");
+                    _logger.LogError("Error on connectiong {ex}", ex);
+
+                    Thread.Sleep(Interval);
+                }
+            }
+
+        } 
+
         public ConsumerService(ILogger<ConsumerService> logger, IConfiguration config)
         {
+            _logger = logger;
             _consumerConfig = BuildConfig(config);
 
             logger.LogInformation("Initializing consumer service with host: {hostname}", _consumerConfig.HostName);
@@ -37,7 +63,9 @@ namespace NotificationService.Services
                  HostName = _consumerConfig.HostName
             };
 
-            _connection = factory.CreateConnection();
+            InstantiateConnection(factory);
+
+            if (_connection == null) throw new Exception("Unable to create channel for consumer");
 
             _channel = _connection.CreateModel();
 
