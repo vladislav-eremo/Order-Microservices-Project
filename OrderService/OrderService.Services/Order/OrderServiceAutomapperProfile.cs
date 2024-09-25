@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrderService.Services.Order
 {
-    internal class OrderServiceAutomapperProfile : Profile
+    public class OrderServiceAutomapperProfile : Profile
     {
         public OrderServiceAutomapperProfile() {
             CreateMap<OrderEntity, GetOrderDto>();

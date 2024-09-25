@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
+using OrderService.App;
+using OrderService.Domain.Entities;
 using OrderService.Infrastructure;
-using OrderService.Infrastructure.Repositories.Order;
+using OrderService.Infrastructure.Repositories;
 using OrderService.Services.Broker;
 using OrderService.Services.Broker.RabbitMQ;
 using OrderService.Services.Order;
@@ -22,7 +24,9 @@ builder.Services.AddDbContext<OrderServiceDBContext>();
 
 builder.Services.AddTransient<IBroker, RabbitMQService>();
 
-builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+//Inject all generic repositories
+builder.Services.InjectRepositories();
+
 builder.Services.AddTransient<IOrderService, OrderService.Services.Order.OrderService>();
 
 var app = builder.Build();

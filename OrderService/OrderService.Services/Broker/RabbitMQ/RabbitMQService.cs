@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderService.Services.Broker.RabbitMQ
 {
@@ -28,7 +24,7 @@ namespace OrderService.Services.Broker.RabbitMQ
                 HostName = _rabbitMQConfig.Hostname,
             };
 
-            logger.LogInformation("Configured RABBITMQ connection with host: {hostname}", _rabbitMQConfig.Hostname);
+            logger.LogInformation("Configured RABBITMQ connection with host: {Hostname}", _rabbitMQConfig.Hostname);
         }
 
         public void SendMessage(string message)

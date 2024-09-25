@@ -10,7 +10,10 @@ namespace NotificationService.Services
 {
     public class ConsumerService
     {
-        private ConsumerConfig _consumerConfig;
+        private readonly ConsumerConfig _consumerConfig;
+        private static IConnection? _connection;
+        private static IModel? _channel;
+        private static EventingBasicConsumer? _consumer;
 
         private static ConsumerConfig BuildConfig(IConfiguration configuration)
         {
@@ -34,22 +37,27 @@ namespace NotificationService.Services
                  HostName = _consumerConfig.HostName
             };
 
-            using var connection = factory.CreateConnection();
-            using var channel = connection.CreateModel();
+            _connection = factory.CreateConnection();
 
-            var consumer = new EventingBasicConsumer(channel);
+            _channel = _connection.CreateModel();
 
-            consumer.Received += (model, ea) =>
+            _consumer = new EventingBasicConsumer(_channel);
+
+            _consumer.Received += (model, ea) =>
             {
+                logger.LogInformation($"Order received");
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
                 var orderData = JsonSerializer.Deserialize<CreateOrderDto>(message);
-                logger.LogInformation($"Order received");
-                if (orderData != null ) logger.LogInformation("Order data: {Description}", orderData.Description);
+                if (orderData != null ) logger.LogInformation("Order data: {orderData}", orderData);
             };
 
-            channel.QueueBind(_consumerConfig.QueueName, exchange: _consumerConfig.Exchange, routingKey: string.Empty);
+            _channel.ExchangeDeclare(_consumerConfig.Exchange, "fanout");
 
-            channel.BasicConsume(_consumerConfig.QueueName, autoAck: true, consumer: consumer);
+            _channel.QueueDeclare(_consumerConfig.QueueName, false, false, false);
+
+            _channel.QueueBind(_consumerConfig.QueueName, exchange: _consumerConfig.Exchange, routingKey: string.Empty);
+
+            _channel.BasicConsume(_consumerConfig.QueueName, autoAck: true, consumer: _consumer);
 
             logger.LogInformation("Consumer service ready");
         }
