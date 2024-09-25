@@ -18,6 +18,8 @@ namespace UnitTest
     {
         private  IOrderService _orderService;
         private IGenericRepository<OrderEntity> _orderRepository;
+        private IGenericRepository<ProductEntity> _productRepository;
+        private IGenericRepository<OrderProductEntity> _orderProductRepo;
 
         [SetUp]
         public void Setup()
@@ -25,6 +27,8 @@ namespace UnitTest
             var db = new OrderServiceDBContext();
 
             _orderRepository = new GenericRepository<OrderEntity>(db);
+            _productRepository = new GenericRepository<ProductEntity>(db);
+            _orderProductRepo = new GenericRepository<OrderProductEntity>(db);
 
             var mapper = new MapperConfiguration(cfg => cfg.AddProfile<OrderServiceAutomapperProfile>())
                         .CreateMapper();
@@ -46,6 +50,8 @@ namespace UnitTest
             var customerNum = "+73312344567";
             var orderDesc = "Order N765";
 
+            _productRepository.Add(new ProductEntity { Name = "Product1", Price = 200 });
+
             _orderService.CreateOrder(
                 new OrderService.Domain.DTOs.CreateOrderDto
                 {
@@ -53,11 +59,18 @@ namespace UnitTest
                     CustomerName = "Ivan Ivanov",
                     CustomerPhoneNumber = customerNum,
                     Description = orderDesc,
-                    ProductIds = []
+                    ProductIds = [1, 1]
                 });
 
-            var res = _orderRepository.Get().FirstOrDefault(o => o.CustomerPhoneNumber.Equals(customerNum) && o.Description.Equals(orderDesc));
-            Assert.That(res, Is.Not.Null);
+            var res1 = _orderRepository.Get().FirstOrDefault(o => o.CustomerPhoneNumber.Equals(customerNum) && o.Description.Equals(orderDesc));
+            Assert.That(res1, Is.Not.Null);
+
+            if (res1 != null) {
+                var res2 = _orderProductRepo.Get().FirstOrDefault(o => o.OrderId.Equals(res1.Id));
+                Assert.That(res2, Is.Not.Null);
+                Assert.That(res2.Count, Is.EqualTo(2));
+            }
+
         }
     }
 }
